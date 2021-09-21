@@ -1,10 +1,14 @@
 package com.bank.accountmanagement.Models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 @Entity
@@ -14,16 +18,17 @@ public class Account {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq")
 	@Column
 	private String accountNumber;
-	@Column
-	private int customerId;
+	@ManyToOne
+	private Customer customer;
 	@Column
 	private double currentBalance;
+	@OneToMany
+	private List<Transaction> transactions;
 	
-	
-	public Account(String accountNumber, int customerId, double currentBalance) {
+	public Account(String accountNumber, Customer customer, double currentBalance) {
 		super();
 		this.accountNumber = accountNumber;
-		this.customerId = customerId;
+		this.customer = customer;
 		this.currentBalance = currentBalance;
 	}
 
@@ -44,13 +49,13 @@ public class Account {
 	}
 
 
-	public int getCustomerId() {
-		return customerId;
+	public Customer getCustomer() {
+		return customer;
 	}
 
 
-	public void setCustomerId(int customerId) {
-		this.customerId = customerId;
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
 	}
 
 

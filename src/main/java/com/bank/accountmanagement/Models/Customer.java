@@ -5,14 +5,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
 public class Customer {
-	@SequenceGenerator(name="seq", initialValue=10000, allocationSize=1)
+	@SequenceGenerator(name="seq", initialValue=100000, allocationSize=1)
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq")
-	private long customerId;
+	private int customerId;
 	@Column
 	private String panCard;
 	@Column
@@ -23,8 +24,11 @@ public class Customer {
 	private String postalAddress;
 	@Column
 	private String email;
-	public Customer(long customerId, String panCard, long aadharNumber, String name, String postalAddress,
-			String email) {
+	@OneToOne
+	private User user;
+	
+	public Customer(int customerId, String panCard, long aadharNumber, String name, String postalAddress, String email,
+			User user) {
 		super();
 		this.customerId = customerId;
 		this.panCard = panCard;
@@ -32,11 +36,12 @@ public class Customer {
 		this.name = name;
 		this.postalAddress = postalAddress;
 		this.email = email;
+		this.user = user;
 	}
 	public long getCustomerId() {
 		return customerId;
 	}
-	public void setCustomerId(long customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 	public String getPanCard() {
@@ -69,4 +74,11 @@ public class Customer {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 }

@@ -1,12 +1,12 @@
 package com.bank.accountmanagement.Models;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Entity
 public class Role {
 	@Id
-	@GeneratedValue()
 	@Column
 	private int roleId;
 	@Column
