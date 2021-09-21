@@ -1,0 +1,37 @@
+package com.bank.accountmanagement.Models;
+
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+public class Role {
+	@Id
+	@GeneratedValue()
+	@Column
+	private int roleId;
+	@Column
+	private String name;
+	public Role() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	public Role(int roleId, String name) {
+		super();
+		this.roleId = roleId;
+		this.name = name;
+	}
+	public int getRoleId() {
+		return roleId;
+	}
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+}
