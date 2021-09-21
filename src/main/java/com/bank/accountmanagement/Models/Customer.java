@@ -1,11 +1,27 @@
 package com.bank.accountmanagement.Models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+
+@Entity
 public class Customer {
+	@SequenceGenerator(name="seq", initialValue=10000, allocationSize=1)
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq")
 	private long customerId;
+	@Column
 	private String panCard;
+	@Column
 	private	long aadharNumber;
+	@Column
 	private String name;
+	@Column
 	private String postalAddress;
+	@Column
 	private String email;
 	public Customer(long customerId, String panCard, long aadharNumber, String name, String postalAddress,
 			String email) {
