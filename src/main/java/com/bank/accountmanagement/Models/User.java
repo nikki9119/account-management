@@ -1,31 +1,38 @@
 package com.bank.accountmanagement.Models;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class User {
-	private int UserId;
-	private String Password;
+	@Id
+	private int userId;
+	private String password;
 	
 	
 	public int getUserId() {
-		return UserId;
+		return userId;
 	}
 	public void setUserId(int userId) {
-		UserId = userId;
+		this.userId = userId;
 	}
 	public String getPassword() {
-		return Password;
+		return password;
 	}
 	public void setPassword(String password) {
-		Password = password;
+		this.password = password;
 	}
 	public User(int userId, String password) {
 		super();
-		UserId = userId;
-		Password = password;
+		this.userId = userId;
+		this.password = password;
 	}
 	public User() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 	
 	
 	
