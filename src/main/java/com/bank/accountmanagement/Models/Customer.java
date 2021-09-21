@@ -27,16 +27,7 @@ public class Customer {
 	@OneToOne
 	private User user;
 	
-	public Customer(int customerId, String panCard, long aadharNumber, String name, String postalAddress, String email,
-			User user) {
-		super();
-		this.customerId = customerId;
-		this.panCard = panCard;
-		this.aadharNumber = aadharNumber;
-		this.name = name;
-		this.postalAddress = postalAddress;
-		this.email = email;
-		this.user = user;
+	public Customer() {
 	}
 	public long getCustomerId() {
 		return customerId;
