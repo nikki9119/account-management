@@ -42,12 +42,6 @@ public class Customer {
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	
-	public Customer() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	public Customer(int customerId, String panCard, long aadharNumber, String name, String postalAddress, String email,
 			LocalDate dob, User user, byte[] panImg, byte[] aadharImg) {
 		super();
