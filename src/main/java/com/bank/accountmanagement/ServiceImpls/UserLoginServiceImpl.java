@@ -1,8 +1,7 @@
 package com.bank.accountmanagement.ServiceImpls;
-import java.nio.charset.Charset;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bank.accountmanagement.Models.User;
@@ -15,8 +14,9 @@ public class UserLoginServiceImpl implements UserLoginService {
 
 	@Autowired
 	UserLoginRepository userLoginRepository;
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	
+	CustomPasswordEncoder passwordEncoder = new CustomPasswordEncoder();
+	
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -34,10 +34,12 @@ public class UserLoginServiceImpl implements UserLoginService {
 	}
 	
 	public User createNewUserCredentials() {
-		int userId = (int) Math.random();
-		byte[] array = new byte[8];
-	    String password = new String(array, Charset.forName("UTF-8"));
-	    User newUser = new User(userId, passwordEncoder.encode(password),roleRepository.findById(1));
+//		byte[] array = new byte[8];
+		String userId = RandomStringUtils.randomAlphabetic(7);
+		System.out.println(userId);
+	    String password = RandomStringUtils.randomAlphabetic(8);
+	    System.out.println(password);
+	    User newUser = new User(userId,passwordEncoder.encode(password),roleRepository.findById(1));
 		return newUser;
 	}
 
