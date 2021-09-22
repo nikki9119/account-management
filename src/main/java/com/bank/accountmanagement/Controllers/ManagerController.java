@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bank.accountmanagement.Models.Customer;
 import com.bank.accountmanagement.Models.User;
+import com.bank.accountmanagement.Services.AccCreationEmailService;
 import com.bank.accountmanagement.Services.ManagerService;
 import com.bank.accountmanagement.Services.UserLoginService;
 
@@ -24,6 +25,8 @@ public class ManagerController {
 	
 	@Autowired
 	UserLoginService userLoginService;
+	@Autowired
+	AccCreationEmailService accCreationEmailService;
 	
 	@PostMapping("api/manager/create-customer")
 	public ResponseEntity<Object> createCustomer(@RequestParam(value="pan_number") String panCard, 
@@ -58,6 +61,10 @@ public class ManagerController {
 			return new ResponseEntity<>(resultSet, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		resultSet.put("customer_id", Long.toString(newCust.getCustomerId()));
+		String emailUserName = newUser.getUserId();
+		String emailPassword = newUser.getPassword();
+		String customerEmail = newCust.getEmail();
+		accCreationEmailService.sendEmail(emailUserName,emailPassword,customerEmail);
 		return new ResponseEntity<>(resultSet, HttpStatus.OK);
 	}
 	
