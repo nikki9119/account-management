@@ -9,7 +9,9 @@ import com.bank.accountmanagement.Models.User;
 @Repository
 public interface UserLoginRepository extends JpaRepository<User, Integer> {
 
-	User findUserByUserIdAndPassword(int userId, String password);
-	User findUserByUserIdAndRoleRoleId(int userId, int roleId);
+	User findUserByUserIdAndPassword(String userId, String password);
+	User findUserByUserIdAndRoleRoleId(String userId, int roleId);
+	User findUserByUserId(String userId);
+	
 
 }
