@@ -1,8 +1,13 @@
 package com.bank.accountmanagement.ServiceImpls;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bank.accountmanagement.Models.Account;
 import com.bank.accountmanagement.Models.Customer;
+import com.bank.accountmanagement.Models.Transaction;
+import com.bank.accountmanagement.Repositories.AccountRepository;
 import com.bank.accountmanagement.Repositories.CustomerRepository;
 import com.bank.accountmanagement.Services.ManagerService;
 
@@ -12,6 +17,9 @@ public class ManagerServiceImpl implements ManagerService{
 	
 	@Autowired
 	private CustomerRepository customerRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	public Customer createNewCustomer(Customer customer) throws Exception{
 		try {
@@ -34,5 +42,22 @@ public class ManagerServiceImpl implements ManagerService{
 		}
 		
 		
+	}
+	
+	public Account createNewAccount(int customerId) throws Exception{
+		Account account = new Account();
+		System.out.println(customerId);
+		Customer customer = customerRepository.findById(customerId).get();
+		System.out.println(customer.getName());
+		account.setCurrentBalance(0);
+		account.setCustomer(customer);
+		account.setTransactions(new ArrayList<Transaction>());
+		System.out.println(account.getCurrentBalance());
+		try {
+			account = accountRepository.save(account);
+		}catch(Exception e) {
+			throw e;
+		}
+		return account;
 	}
 }
