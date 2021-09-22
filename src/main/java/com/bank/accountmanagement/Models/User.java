@@ -12,6 +12,7 @@ public class User {
 	private String password;
 	@OneToOne
 	private Role role;
+	private boolean isFirstTime;
 	
 	public Role getRole() {
 		return role;
@@ -32,11 +33,18 @@ public class User {
 		this.password = password;
 	}
 	
+	public boolean isFirstTime() {
+		return isFirstTime;
+	}
+	public void setFirstTime(boolean isFirstTime) {
+		this.isFirstTime = isFirstTime;
+	}
 	public User(int userId, String password, Role role) {
 		super();
 		this.userId = userId;
 		this.password = password;
 		this.role = role;
+		this.isFirstTime = true;
 	}
 	public User() {
 		super();
