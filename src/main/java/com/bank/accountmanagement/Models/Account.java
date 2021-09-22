@@ -2,6 +2,7 @@ package com.bank.accountmanagement.Models;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class Account {
 	private Customer customer;
 	@Column
 	private double currentBalance;
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.ALL})
 	private List<Transaction> transactions;
 	
 	public List<Transaction> getTransactions() {
@@ -45,6 +46,7 @@ public class Account {
 
 	public Account() {
 		super();
+		//transactions = new List<Transaction>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -77,6 +79,9 @@ public class Account {
 	public void setCurrentBalance(double currentBalance) {
 		this.currentBalance = currentBalance;
 	}
-	
-	
+
+
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
 }

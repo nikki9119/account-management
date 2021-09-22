@@ -16,7 +16,7 @@ public class Transaction {
 	LocalDateTime dateTime;
 	String transactionType;
 	String subType;
-	double currentBalance;
+	double transactionAmount;
 	
 	public Transaction() {
 		// TODO Auto-generated constructor stub
@@ -53,10 +53,18 @@ public class Transaction {
 	public void setSubType(String subType) {
 		this.subType = subType;
 	}
-	public double getCurrentBalance() {
-		return currentBalance;
+	public double getTransactionAmount() {
+		return transactionAmount;
 	}
-	public void setCurrentBalance(double currentBalance) {
-		this.currentBalance = currentBalance;
+	public void setTransactionAmount(double transactionAmount) {
+		this.transactionAmount = transactionAmount;
+	}
+
+	@Override
+	public String toString() {
+		return "Transaction [transactionId=" + transactionId + ", transactionRefNum=" + transactionRefNum
+				+ ", dateTime=" + dateTime + ", transactionType=" + transactionType + ", subType=" + subType
+				+ ", transactionAmount=" + transactionAmount + "]";
 	}	
+	
 }
