@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class User {
 	@Id
-	private int userId;
+	private String userId;
 	private String password;
 	@OneToOne
 	private Role role;
@@ -20,10 +20,10 @@ public class User {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public int getUserId() {
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(int userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 	public String getPassword() {
@@ -39,7 +39,7 @@ public class User {
 	public void setFirstTime(boolean isFirstTime) {
 		this.isFirstTime = isFirstTime;
 	}
-	public User(int userId, String password, Role role) {
+	public User(String userId, String password, Role role) {
 		super();
 		this.userId = userId;
 		this.password = password;

@@ -1,10 +1,14 @@
 package com.bank.accountmanagement.Models;
 
+import java.time.LocalDate;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -24,15 +28,22 @@ public class Customer {
 	private String postalAddress;
 	@Column
 	private String email;
-	@OneToOne
+	@Column
+	private LocalDate dob;
+	@OneToOne(cascade=CascadeType.ALL)
 	private User user;
+	@Lob
+	private byte[] panImg;
+	@Lob
+	private byte[] aadharImg;
 	
 	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
 	public Customer(int customerId, String panCard, long aadharNumber, String name, String postalAddress, String email,
-			User user) {
+			LocalDate dob, User user, byte[] panImg, byte[] aadharImg) {
 		super();
 		this.customerId = customerId;
 		this.panCard = panCard;
@@ -40,8 +51,41 @@ public class Customer {
 		this.name = name;
 		this.postalAddress = postalAddress;
 		this.email = email;
+		this.dob = dob;
 		this.user = user;
+		this.panImg = panImg;
+		this.aadharImg = aadharImg;
 	}
+
+
+	public byte[] getPanImg() {
+		return panImg;
+	}
+
+	public void setPanImg(byte[] panImg) {
+		this.panImg = panImg;
+	}
+
+	public byte[] getAadharImg() {
+		return aadharImg;
+	}
+
+	public void setAadharImg(byte[] aadharImg) {
+		this.aadharImg = aadharImg;
+	}
+
+	public LocalDate getDob() {
+		return dob;
+	}
+
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+	
+	public void setDobFromString(String dob) {
+		this.dob = LocalDate.parse(dob);
+	}
+
 	public long getCustomerId() {
 		return customerId;
 	}
