@@ -21,4 +21,18 @@ public class ManagerServiceImpl implements ManagerService{
 		}
 		return customer;
 	}
+	public String verifyPanCard(String panCardNumber)
+	{
+		Customer customer = customerRepository.findCustomerByPanCard(panCardNumber);
+		if(customer != null)
+		{
+			return "Account exists";
+		}
+		else 
+		{
+			return "Account doesn't exist";
+		}
+		
+		
+	}
 }

@@ -19,19 +19,6 @@ public class UserLoginServiceImpl implements UserLoginService {
 	
 	@Autowired
 	private RoleRepository roleRepository;
-
-	public String verifyUserCredential(int userId, String password, int roleId) {
-
-		User user = userLoginRepository.findUserByUserIdAndPassword(userId,password);
-		User user1= userLoginRepository.findUserByUserIdAndRoleRoleId(userId,roleId);
-		if (user != null && user1!=null) {
-			return "Valid User";
-		} 
-		else {
-			return "Invalid User";
-		}
-
-	}
 	
 	public User createNewUserCredentials() {
 //		byte[] array = new byte[8];
@@ -41,6 +28,37 @@ public class UserLoginServiceImpl implements UserLoginService {
 	    System.out.println(password);
 	    User newUser = new User(userId,passwordEncoder.encode(password),roleRepository.findById(1));
 		return newUser;
+	}
+	
+	public String verifyUserCredential(String userId, String password, int roleId) {
+
+		User user = userLoginRepository.findUserByUserIdAndPassword(userId, password);
+		User user1 = userLoginRepository.findUserByUserIdAndRoleRoleId(userId, roleId);
+		if (user != null && user1 != null) {
+			return "Valid User";
+		} else {
+			return "Invalid User";
+		}
+
+	}
+	public String updateUserCredential(String userId, String password) {
+		User user1 = userLoginRepository.findUserByUserId(userId);
+		if (user1 == null)
+		{
+			return "User not found";
+		}
+		else if(user1.isFirstTime()==true)
+		{
+			user1.setPassword(password);
+			user1.setFirstTime(false);
+			userLoginRepository.save(user1);
+			return "Credentials updated";
+		}
+		else 
+		{
+			return "You have already updated your password";
+		}
+		
 	}
 
 }
