@@ -21,11 +21,8 @@ public class UserLoginServiceImpl implements UserLoginService {
 	private RoleRepository roleRepository;
 	
 	public User createNewUserCredentials() {
-//		byte[] array = new byte[8];
 		String userId = RandomStringUtils.randomAlphabetic(7);
-		System.out.println(userId);
 	    String password = RandomStringUtils.randomAlphabetic(8);
-	    System.out.println(password);
 	    User newUser = new User(userId,passwordEncoder.encode(password),roleRepository.findById(1));
 		return newUser;
 	}
