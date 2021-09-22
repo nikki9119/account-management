@@ -11,6 +11,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OrderBy;
+
 @Entity
 public class Account {
 	@SequenceGenerator(name="seq", initialValue=1000000000, allocationSize=1)
@@ -25,6 +30,15 @@ public class Account {
 	@OneToMany
 	private List<Transaction> transactions;
 	
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+
+	public void setTransactions(List<Transaction> transactions) {
+		this.transactions = transactions;
+	}
+
+
 	public Account(String accountNumber, Customer customer, double currentBalance) {
 		super();
 		this.accountNumber = accountNumber;

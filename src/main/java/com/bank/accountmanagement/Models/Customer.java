@@ -27,6 +27,12 @@ public class Customer {
 	@OneToOne
 	private User user;
 	
+	
+	
+	public Customer() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public Customer(int customerId, String panCard, long aadharNumber, String name, String postalAddress, String email,
 			User user) {
 		super();
