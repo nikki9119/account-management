@@ -25,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService{
 		if(accs.isPresent()) {
 			for(Account acc: accs.get()) {
 				HashMap<String, String> accAndBalance = new HashMap<String, String>();
-				accAndBalance.put("account_number", acc.getAccountNumber());
+				accAndBalance.put("account_number", Long.toString(acc.getAccountNumber()));
 				accAndBalance.put("current_balance", Double.toString(acc.getCurrentBalance()));
 				accounts.add(accAndBalance);
 			}

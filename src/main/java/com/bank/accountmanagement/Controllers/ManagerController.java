@@ -8,10 +8,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.bank.accountmanagement.Models.Account;
 import com.bank.accountmanagement.Models.Customer;
 import com.bank.accountmanagement.Models.User;
 import com.bank.accountmanagement.Services.ManagerService;
@@ -58,6 +60,21 @@ public class ManagerController {
 			return new ResponseEntity<>(resultSet, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		resultSet.put("customer_id", Long.toString(newCust.getCustomerId()));
+		return new ResponseEntity<>(resultSet, HttpStatus.OK);
+	}
+	
+	@PutMapping("api/manager/create-account")
+	public ResponseEntity<Object> createAccount(@RequestParam(value="customer_id") int customerId){
+		HashMap<String,String> resultSet = new HashMap<String,String>();
+		try {
+			Account account = managerService.createNewAccount(customerId);
+			resultSet.put("customer_id", Integer.toString(customerId));
+			resultSet.put("account_number",Long.toString(account.getAccountNumber()));
+		}catch(Exception e) {
+			e.printStackTrace();
+			resultSet.put("message", e.getMessage());
+			return new ResponseEntity<>(resultSet, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		return new ResponseEntity<>(resultSet, HttpStatus.OK);
 	}
 	

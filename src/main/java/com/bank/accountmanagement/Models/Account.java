@@ -11,18 +11,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OrderBy;
 
 @Entity
 public class Account {
-	@SequenceGenerator(name="seq", initialValue=1000000000, allocationSize=1)
+	@SequenceGenerator(name="seq1", initialValue=1000000000, allocationSize=1)
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator="seq1")
 	@Column
-	private String accountNumber;
+	private long accountNumber;
 	@ManyToOne
 	private Customer customer;
 	@Column
@@ -39,7 +35,7 @@ public class Account {
 	}
 
 
-	public Account(String accountNumber, Customer customer, double currentBalance) {
+	public Account(long accountNumber, Customer customer, double currentBalance) {
 		super();
 		this.accountNumber = accountNumber;
 		this.customer = customer;
@@ -53,12 +49,12 @@ public class Account {
 	}
 
 
-	public String getAccountNumber() {
+	public long getAccountNumber() {
 		return accountNumber;
 	}
 
 
-	public void setAccountNumber(String accountNumber) {
+	public void setAccountNumber(long accountNumber) {
 		this.accountNumber = accountNumber;
 	}
 
