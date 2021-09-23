@@ -57,6 +57,7 @@ public class ManagerServiceImpl implements ManagerService{
 		System.out.println(customer.getName());
 		account.setCurrentBalance(0);
 		account.setCustomer(customer);
+		account.setDailyLimit(0);
 		account.setTransactions(new ArrayList<Transaction>());
 		System.out.println(account.getCurrentBalance());
 		try {

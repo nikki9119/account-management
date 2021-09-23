@@ -23,12 +23,12 @@ import java.util.List;
 @Component
 public class TransactionServiceImpl implements TransactionService {
 	
-	private long limit = 0;
+	
 	
 //******************* BY SHYAM ***********************	
 	
 	@Override
-	public void Deposit(long depositID, double amount) {
+	public String Deposit(long depositID, double amount) {
 	
 		Account depositor=accountRepo.getById(depositID);
 		
@@ -48,7 +48,8 @@ public class TransactionServiceImpl implements TransactionService {
 		//transactionRepo.save(transaction);
 		accountRepo.save(depositor);
 		GenerateTransactionRef(transaction,depositor);
-		//sendEmail(depositor, transaction);		
+		//sendEmail(depositor, transaction);	
+		return "Transaction successful";
 	}
 //**********************BY SMRUTHI*********************************
 	
@@ -142,16 +143,22 @@ public class TransactionServiceImpl implements TransactionService {
 			
 			int today = LocalDateTime.now().getDayOfMonth();
 			
-			for(Transaction transation : transactionList) {
-				System.out.println("DATE TIME -> "+transation.getDateTime().getDayOfMonth());
-				System.out.println("LIMIT - " + limit);
-				if(today == transation.getDateTime().getDayOfMonth() && transation.getTransactionType().equals("Withdrawal"))
-					limit += transation.getTransactionAmount();
+			for(Transaction transaction : transactionList) {
+				System.out.println("DATE TIME -> "+transaction.getDateTime().getDayOfMonth());
+				System.out.println("LIMIT - " + account.getDailyLimit());
+				if(today == transaction.getDateTime().getDayOfMonth()) {
+					if(transaction.getTransactionType().equals("Withdrawal"))
+					{
+						account.setDailyLimit(account.getDailyLimit() + transaction.getTransactionAmount());
+					}
+				}else {
+					account.setDailyLimit(0.0);
+				}
 			}
-			if(limit - amountToWithdraw < -10000) {
+			if(account.getDailyLimit() - amountToWithdraw < -10000) {
 				return false;
 			}
-			limit -= amountToWithdraw;
+			account.setDailyLimit(account.getDailyLimit() - amountToWithdraw);
 			return true;
 			}
 

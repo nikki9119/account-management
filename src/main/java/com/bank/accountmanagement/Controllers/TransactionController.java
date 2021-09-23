@@ -35,9 +35,9 @@ public class TransactionController {
 	
 //DEPOSIT
 	@PostMapping("api/transaction/deposit/{depositID}/{amount}")
-	public void DepositMoney(@PathVariable long depositID,@PathVariable double amount)
+	public String DepositMoney(@PathVariable long depositID,@PathVariable double amount)
 	{
-		transactionService.Deposit(depositID,amount);
+		return transactionService.Deposit(depositID,amount);
 	}
 	
 	
