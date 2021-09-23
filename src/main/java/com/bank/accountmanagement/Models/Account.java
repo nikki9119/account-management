@@ -26,6 +26,18 @@ public class Account {
 	private double currentBalance;
 	@OneToMany(cascade = {CascadeType.ALL})
 	private List<Transaction> transactions;
+	@Column
+	private double dailyLimit;
+
+	public double getDailyLimit() {
+		return dailyLimit;
+	}
+
+
+	public void setDailyLimit(double dailyLimit) {
+		this.dailyLimit = dailyLimit;
+	}
+
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;
@@ -37,6 +49,7 @@ public class Account {
 		this.accountNumber = accountNumber;
 		this.customer = customer;
 		this.currentBalance = currentBalance;
+		this.dailyLimit = 0;
 	}
 
 

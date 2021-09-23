@@ -9,7 +9,7 @@ import com.bank.accountmanagement.Models.Transaction;
 public interface TransactionService {
 	
 	//Deposit
-	public void Deposit(long depositID, double amount);
+	public String Deposit(long depositID, double amount);
 	
 	//Transfer
 	public String Transfer(long senderId, double amount, long recieverId);
