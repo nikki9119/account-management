@@ -26,10 +26,6 @@ public class Account {
 	private double currentBalance;
 	@OneToMany(cascade = {CascadeType.ALL})
 	private List<Transaction> transactions;
-	
-	public List<Transaction> getTransactions() {
-		return transactions;
-	}
 
 	public void setTransactions(List<Transaction> transactions) {
 		this.transactions = transactions;

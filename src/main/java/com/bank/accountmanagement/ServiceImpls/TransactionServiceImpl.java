@@ -3,15 +3,12 @@ package com.bank.accountmanagement.ServiceImpls;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.mail.MailException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import com.bank.accountmanagement.Models.Account;
 import com.bank.accountmanagement.Models.Transaction;
 import com.bank.accountmanagement.Models.Customer;
@@ -31,7 +28,7 @@ public class TransactionServiceImpl implements TransactionService {
 //******************* BY SHYAM ***********************	
 	
 	@Override
-	public void Deposit(String depositID, double amount) {
+	public void Deposit(long depositID, double amount) {
 	
 		Account depositor=accountRepo.getById(depositID);
 		
@@ -50,7 +47,8 @@ public class TransactionServiceImpl implements TransactionService {
 		
 		//transactionRepo.save(transaction);
 		accountRepo.save(depositor);
-		sendEmail(depositor, transaction);		
+		GenerateTransactionRef(transaction,depositor);
+		//sendEmail(depositor, transaction);		
 	}
 //**********************BY SMRUTHI*********************************
 	
@@ -67,8 +65,8 @@ public class TransactionServiceImpl implements TransactionService {
         message.setFrom("acc.management.system@gmail.com");
         message.setTo(emailId);
         
-        String firstEncryptedAccountNumber = account.getAccountNumber().substring(0, 3); 
-        String lastEncryptedAccountNumber = account.getAccountNumber().substring(5, 9);
+        String firstEncryptedAccountNumber = Long.toString(account.getAccountNumber()).substring(0, 3); 
+        String lastEncryptedAccountNumber = Long.toString(account.getAccountNumber()).substring(5, 9);
         String encryptedAccountNumber = firstEncryptedAccountNumber +"XXX"+ lastEncryptedAccountNumber;
         
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
@@ -99,14 +97,14 @@ public class TransactionServiceImpl implements TransactionService {
 			return amt;
 		}
 		@Override
-		public Long getCurrentBalance(String accountNumber) {
+		public Long getCurrentBalance(long accountNumber) {
 			Account account = accountRepo.getById(accountNumber);
 			Long currentBalance = (long) account.getCurrentBalance();
 			return currentBalance;
 		}
 	 
 	@Override
-	public Long DeductMoney(String accountNumber, Long amountToWithdraw) { 
+	public Long DeductMoney(long accountNumber, Long amountToWithdraw) { 
 		
 
 			Account account = accountRepo.getById(accountNumber);
@@ -126,7 +124,8 @@ public class TransactionServiceImpl implements TransactionService {
 			accountRepo.save(account);
 			
 			try {
-				sendEmail(account, transaction);
+				GenerateTransactionRef(transaction, account);
+				//sendEmail(account, transaction);
 			}catch( Exception e ){
 				// catch error
 				System.out.println("Error Sending Email: " + e.getMessage());
@@ -136,7 +135,7 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 
 	@Override
-	public boolean checkLimit10000(String accountNumber, Long amountToWithdraw) {
+	public boolean checkLimit10000(long accountNumber, Long amountToWithdraw) {
 			
 			Account account = accountRepo.getById(accountNumber);
 			List<Transaction> transactionList = account.getTransactions();
@@ -156,7 +155,7 @@ public class TransactionServiceImpl implements TransactionService {
 			return true;
 			}
 
-	Transaction Transfer(double amountToWithdraw, String accountNumber) {
+	Transaction Transfer(double amountToWithdraw, long accountNumber) {
 			
 	    	Account account = accountRepo.getById(accountNumber);
 	    	Transaction transaction = new Transaction();
@@ -182,7 +181,7 @@ public class TransactionServiceImpl implements TransactionService {
 	TransactionRepo transactionRepo;
 	
 	@Override
-	public String Transfer(String senderId, double amount, String recieverId) {
+	public String Transfer(long senderId, double amount, long recieverId) {
 		
 		Account sender = accountRepo.getById(senderId) ;
 		Account reciever = accountRepo.getById(recieverId);
@@ -203,7 +202,10 @@ public class TransactionServiceImpl implements TransactionService {
 		senderTransaction.setTransactionRefNum("T"+senderTransaction.getTransactionId()+"-"+sender.getAccountNumber()+"-"+reciever.getAccountNumber());
 		sender.getTransactions().add(senderTransaction);
 		accountRepo.save(sender);
-		sendEmail(sender, senderTransaction);
+		
+		senderTransaction = GenerateRef(sender);
+		int senderTID = senderTransaction.getTransactionId();
+		//sendEmail(sender, senderTransaction);
 		//transactionRepo.save(senderTransaction);
 	
 		Transaction recieverTransaction = new Transaction();
@@ -214,14 +216,27 @@ public class TransactionServiceImpl implements TransactionService {
 		recieverTransaction.setDateTime(timeStamp);
 		recieverTransaction.setTransactionRefNum("T"+recieverTransaction.getTransactionId()+"-"+sender.getAccountNumber()+"-"+reciever.getAccountNumber());
 		reciever.getTransactions().add(recieverTransaction);
-		accountRepo.save(reciever);		
-		sendEmail(reciever, recieverTransaction);
+		accountRepo.save(reciever);	
+
+		
+
+
+		recieverTransaction = GenerateRef(reciever);
+		int recieverTID = recieverTransaction.getTransactionId();
+		
+		recieverTransaction.setTransactionRefNum("T"+senderTID+"-"+recieverTID);
+		senderTransaction.setTransactionRefNum("T"+senderTID+"-"+recieverTID);
+		
+		saveAndNotify(sender, senderTransaction);
+		saveAndNotify(reciever, recieverTransaction);
+			
 		return "Successfull transfer";
-		//transactionRepo.save(recieverTransaction);
-	}
+		
+		
+		}
 	
 	@Override
-	public String checkHistory(String accountNum) {
+	public String checkHistory(long accountNum) {
 		Account account = accountRepo.getById(accountNum);
 		List<Transaction> transactionList = account.getTransactions();
 		
@@ -244,5 +259,21 @@ public class TransactionServiceImpl implements TransactionService {
 		}
 		//return "Unable to fetch history";
 	}
+	void GenerateTransactionRef(Transaction transaction,Account account) {
+		Page<Transaction> page = transactionRepo.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "transactionId")));
+		transaction = page.getContent().get(0);
+		transaction.setTransactionRefNum("T"+transaction.getTransactionId()+":"+account.getAccountNumber());
+		//transaction.setTransactionId(transaction.getTransactionId());
+		saveAndNotify(account, transaction);
+	}
+	Transaction GenerateRef(Account account) {
+		List<Transaction> transactions = accountRepo.getById(account.getAccountNumber()).getTransactions();
+		return transactions.get(transactions.size() - 1);
+	}
+	void saveAndNotify(Account account,Transaction transaction) {
+		accountRepo.save(account);
+		sendEmail(account, transaction);
+	}
+
 
 }

@@ -3,13 +3,11 @@ package com.bank.accountmanagement.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bank.accountmanagement.Service.TransactionService;
@@ -21,65 +19,59 @@ public class TransactionController {
 	TransactionService transactionService;
 
 //WITHDRAW
-	@RequestMapping("api/getCurrentBalance/{id}")
-	public Long getCurrentBalance(@PathVariable String id) {
+	@RequestMapping("api/transaction/getCurrentBalance/{id}")
+	public Long getCurrentBalance(@PathVariable long id) {
 		
 		Long currentBalance = transactionService.getCurrentBalance(id);
 	    return currentBalance; 
 	}
 	
-	@RequestMapping("api/updateCurrentBalance/{id}")
-	public Long updateCurrentBalance(@PathVariable String id, Long amount) {
+	@GetMapping("api/transaction/withdraw/{id}/{amount}")
+	public Long updateCurrentBalance(@PathVariable long id, @PathVariable long amount) {
 		
 		Long currentBalance = transactionService.DeductMoney(id,amount);
 	    return currentBalance;
 	}
 	
 //DEPOSIT
-	@PostMapping("/deposit/{depositID}/{amount}")
-	public void DepositMoney(@PathVariable String depositID,@PathVariable double amount)
+	@PostMapping("api/transaction/deposit/{depositID}/{amount}")
+	public void DepositMoney(@PathVariable long depositID,@PathVariable double amount)
 	{
 		transactionService.Deposit(depositID,amount);
 	}
 	
 	
 //TRANSFER
-	@PostMapping(value = "/transfer",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.TEXT_PLAIN_VALUE)
+	@PostMapping(value = "api/transaction/transfer",consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.TEXT_PLAIN_VALUE)
 	public String transferMoney(@RequestBody TransferData transferData)
 	{	
 		return transactionService.Transfer(transferData.getSenderId(),transferData.getAmount(),transferData.getRecieverId());
 	}
 	
-	@GetMapping("/recent")
-	public String checkHistory(String accountNum)
+	@GetMapping("api/transaction/recent")
+	public String checkHistory(long accountNum)
 	{
 		return transactionService.checkHistory(accountNum);
 	}
 	
-	@GetMapping("/")
-	public String demoPost(String data)
-	{
-		return "hello";
-	}
-	
 //Transfer Data
 	public static class TransferData{
-		private String senderId;
+		private long senderId;
 		private double amount;
-		private String recieverId;
+		private long recieverId;
 		
 		public TransferData() {
         }
-		public TransferData(String senderId, double amount, String recieverId) {
+		public TransferData(long senderId, double amount, long recieverId) {
 			super();
 			this.senderId = senderId;
 			this.amount = amount;
 			this.recieverId = recieverId;
 		}
-		public String getSenderId() {
+		public long getSenderId() {
 			return senderId;
 		}
-		public void setSenderId(String senderId) {
+		public void setSenderId(long senderId) {
 			this.senderId = senderId;
 		}
 		public double getAmount() {
@@ -88,10 +80,10 @@ public class TransactionController {
 		public void setAmount(double amount) {
 			this.amount = amount;
 		}
-		public String getRecieverId() {
+		public long getRecieverId() {
 			return recieverId;
 		}
-		public void setRecieverId(String recieverId) {
+		public void setRecieverId(long recieverId) {
 			this.recieverId = recieverId;
 		}
 		@Override
