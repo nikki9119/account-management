@@ -102,8 +102,8 @@ public class ManagerController {
 		return new ResponseEntity<>(resultSet, HttpStatus.OK);
 	}
 	
-	@GetMapping("/verify-pancard")
-	public String verifyIfPanCardExists(@RequestParam(required = true) String panCardNumber) {
+	@GetMapping("api/manager/verify-pancard")
+	public ResponseEntity<Object> verifyIfPanCardExistss(@RequestParam(required = true) String panCardNumber) {
 		return managerService.verifyPanCard(panCardNumber);
 	}
 

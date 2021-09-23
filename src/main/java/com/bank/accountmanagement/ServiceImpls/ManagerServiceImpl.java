@@ -1,7 +1,10 @@
 package com.bank.accountmanagement.ServiceImpls;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.bank.accountmanagement.Models.Account;
@@ -29,16 +32,19 @@ public class ManagerServiceImpl implements ManagerService{
 		}
 		return customer;
 	}
-	public String verifyPanCard(String panCardNumber)
+	public ResponseEntity<Object> verifyPanCard(String panCardNumber)
 	{
 		Customer customer = customerRepository.findCustomerByPanCard(panCardNumber);
+		HashMap<String,String> result = new HashMap<String, String>();
 		if(customer != null)
 		{
-			return "Account exists";
+			result.put("message","Account exists");
+			return new ResponseEntity<>(result,HttpStatus.OK);
 		}
 		else 
 		{
-			return "Account doesn't exist";
+			result.put("message","Account doest not exists");
+			return new ResponseEntity<>(result,HttpStatus.NOT_FOUND);
 		}
 		
 		

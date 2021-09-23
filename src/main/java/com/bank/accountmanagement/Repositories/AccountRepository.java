@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import com.bank.accountmanagement.Models.Account;
 
 @Repository
-public interface AccountRepository extends JpaRepository<Account, String> {
+public interface AccountRepository extends JpaRepository<Account, Long> {
 	
-	Optional<Account> findById(String accountNumber);
+	Optional<Account> findById(long accountNumber);
 	Optional<List<Account>> findByCustomerCustomerId(int customerId);
 	
 }

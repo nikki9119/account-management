@@ -1,10 +1,8 @@
 package com.bank.accountmanagement.ServiceImpls;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ public class Transactionstatementserviceimpl implements Transactionstatementserv
 	@Autowired
 	private TransactionRepository transactionRepository;
 	
-	public List<Transaction> findTransactionList(String accountNumber) {
+	public List<Transaction> findTransactionList(long accountNumber) {
 		
 		Optional<Account> result= accountRepository.findById(accountNumber);
 		List<Transaction> transactionlist;
@@ -41,7 +39,7 @@ public class Transactionstatementserviceimpl implements Transactionstatementserv
 
 	
 	@Override
-	public List<Transaction> findTransactionListDate(String accountNumber, String date) {
+	public List<Transaction> findTransactionListDate(long accountNumber, String date) {
 		Optional<Account> result= accountRepository.findById(accountNumber);
 		List<Transaction> transactionlist;
 		
@@ -67,7 +65,19 @@ public class Transactionstatementserviceimpl implements Transactionstatementserv
 
 	}
 
-	
+	public List<Transaction> listAll(long accountNumber, String date) {
+        // TODO Auto-generated method stub
+        Optional<Account> result= accountRepository.findById(accountNumber);
+        List<Transaction> transactionlist;
+        if(result.isPresent()) {
+        Account res=result.get();
+        transactionlist= res.getTransactions();
+        transactionlist= transactionRepository.getAllTransactionsByDate(accountNumber, date);
+        return transactionlist;
+        }
+        
+        return new ArrayList<Transaction>();
+    }
 		
 
 }
